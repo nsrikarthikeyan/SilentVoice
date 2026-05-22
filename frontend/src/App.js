@@ -6,6 +6,7 @@ import Register from "./pages/Register";
 import CandidateDashboard from "./pages/CandidateDashboard";
 import HRDashboard from "./pages/HRDashboard";
 import InterviewRoom from "./pages/InterviewRoom";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -14,9 +15,30 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/candidate" element={<CandidateDashboard />} />
-        <Route path="/hr" element={<HRDashboard />} />
-        <Route path="/interview/:roomId" element={<InterviewRoom />} />
+        <Route
+          path="/candidate"
+          element={
+            <ProtectedRoute allowedRole="candidate">
+              <CandidateDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/hr"
+          element={
+            <ProtectedRoute allowedRole="hr">
+              <HRDashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/interview/:roomId"
+          element={
+            <ProtectedRoute>
+              <InterviewRoom />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </Router>
   );

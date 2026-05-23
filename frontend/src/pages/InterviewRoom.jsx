@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
 import CaptionPanel from "../components/CaptionPanel";
 import HRTextInput from "../components/HRTextInput";
+import HandDetector from "../components/HandDetector";
 
 export default function InterviewRoom() {
   const { roomId } = useParams();
@@ -106,27 +107,28 @@ export default function InterviewRoom() {
         <div className="col-span-2 space-y-4">
 
           {/* Camera Feed */}
-          <div className="bg-white/5 rounded-2xl 
-            border border-white/10 overflow-hidden 
-            aspect-video flex items-center justify-center">
-            <div className="text-center">
-              <div className="text-6xl mb-4">📷</div>
-              <p className="text-white font-semibold">
-                Camera Feed
-              </p>
-              <p className="text-gray-400 text-sm mt-1">
-                {userData?.role === "candidate"
-                  ? "Your hands will appear here"
-                  : "Candidate's video will appear here"}
-              </p>
-              <div className="mt-4 bg-[#6C3FC5]/20 
-                text-[#6C3FC5] px-4 py-2 rounded-full 
-                text-sm border border-[#6C3FC5]/30 
-                inline-block">
-                🔨 Camera Integration — Day 4
-              </div>
-            </div>
-          </div>
+{userData?.role === "candidate" ? (
+  <HandDetector
+    onLandmarksDetected={(landmarks) => {
+      console.log("Landmarks:", landmarks);
+    }}
+  />
+) : (
+  <div className="bg-white/5 rounded-2xl
+    border border-white/10 overflow-hidden
+    aspect-video flex items-center justify-center">
+    <div className="text-center">
+      <div className="text-6xl mb-4">👔</div>
+      <p className="text-white font-semibold">
+        Waiting for Candidate
+      </p>
+      <p className="text-gray-400 text-sm mt-1">
+        Candidate's translation will appear
+        in the caption panel
+      </p>
+    </div>
+  </div>
+)}
 
           {/* HR Text Input */}
           {userData?.role === "hr" && (

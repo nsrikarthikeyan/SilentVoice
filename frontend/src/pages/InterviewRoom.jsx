@@ -4,6 +4,7 @@ import { useAuth } from "../hooks/useAuth";
 import CaptionPanel from "../components/CaptionPanel";
 import HRTextInput from "../components/HRTextInput";
 import HandDetector from "../components/HandDetector";
+import SignClassifier from "../components/SignClassifier";
 
 export default function InterviewRoom() {
   const { roomId } = useParams();
@@ -11,8 +12,11 @@ export default function InterviewRoom() {
   const navigate = useNavigate();
   const [translations, setTranslations] = useState([]);
   const [hrMessages, setHrMessages] = useState([]);
+  const [landmarks, setLandmarks] = useState(null);
+  const [detectedSigns, setDetectedSigns] = useState([]);
   const [timer, setTimer] = useState(0);
   const [isActive, setIsActive] = useState(false);
+  
 
   // Interview timer
   useEffect(() => {
@@ -108,12 +112,20 @@ export default function InterviewRoom() {
 
           {/* Camera Feed */}
 {userData?.role === "candidate" ? (
-  <HandDetector
-    onLandmarksDetected={(landmarks) => {
-      console.log("Landmarks:", landmarks);
-    }}
-  />
+  <>
+    <HandDetector
+      onLandmarksDetected={(lm) => setLandmarks(lm)}
+    />
+    <SignClassifier
+      landmarks={landmarks}
+      onSignDetected={(sign) => {
+        setDetectedSigns((prev) => [...prev, sign]);
+        console.log("Sign detected:", sign);
+      }}
+    />
+  </>
 ) : (
+
   <div className="bg-white/5 rounded-2xl
     border border-white/10 overflow-hidden
     aspect-video flex items-center justify-center">

@@ -215,6 +215,7 @@ export default function HandDetector({ onLandmarksDetected }) {
           🤟 Show your hands
         </div>
       )}
+
     </div>
   );
 }
